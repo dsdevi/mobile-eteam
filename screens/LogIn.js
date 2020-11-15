@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TextInput, Button, Alert } from "react-native";
+import { View, StyleSheet, Text, Alert } from "react-native";
+import { Input, Button } from "react-native-elements";
 import { useDispatch } from "react-redux";
+import Colours from "../constants/colours";
 
 import * as eTeamActions from "../helpers/eTeam-actions";
 
@@ -8,46 +10,61 @@ const LogIn = (props) => {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [error, setError] = useState();
+  const [submitDisabled, setSubmitDisabled] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (error) {
-      Alert.alert("An Error Occured!", error, [{ text: "Okay" }]);
+    if (username && password) {
+      setSubmitDisabled(false);
+    } else {
+      setSubmitDisabled(true);
     }
-  }, [error]);
+  }, [username, password])
+
+  // useEffect(() => {
+  //   if (error) {
+  //     Alert.alert("An Error Occured!", error, [{ text: "Okay" }]);
+  //   }
+  // }, [error]);
 
   const login = async () => {
     try {
       await dispatch(eTeamActions.login(username, password));
-      props.navigation.navigate('UserNav');
+      props.navigation.navigate("UserNav");
     } catch (err) {
-        setError(err.message);
+      Alert.alert('Sorry', 'Invalid email or password', [{text:'Okay'}])
     }
   };
 
   return (
-    <View style={styles.formContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
+    <View>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>Log In</Text>
+      </View>
+      <View style={styles.formView}>
+        <Input
           placeholder="Enter username"
+          leftIcon={{ type: "ionicon", name: "md-person" }}
           onChangeText={(text) => {
             setUsername(text);
           }}
         />
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
+        <Input
           placeholder="Enter password"
+          leftIcon={{ type: "ionicon", name: "md-key" }}
           onChangeText={(text) => {
             setPassword(text);
           }}
           secureTextEntry
         />
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button title="Log In" mode="outlined" onPress={login} />
+  
+        <Button
+          title="Log In"
+          disabled={submitDisabled}
+          buttonStyle={styles.submitButton}
+          titleStyle={styles.submitText}
+          onPress={login}
+        />
       </View>
     </View>
   );
@@ -60,25 +77,37 @@ LogIn.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
-  input: {},
-  inputContainer: {
+  headerContainer: {
+    marginTop: 15,
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20,
+    borderBottomWidth: 6,
+    borderColor: Colours.main,
+    marginRight: "40%",
+  },
+  formView: {
     marginTop: 20,
-    marginRight: 80,
-    marginLeft: 20,
-    borderRadius: 20,
-    borderWidth: 1,
-    padding: 10,
-    borderRadius: 10,
   },
-  buttonContainer: {
-    marginTop: 10,
-    alignItems: "flex-start",
-    marginLeft: 25,
-    borderRadius: 10,
+  text: {
+    fontFamily: "WorkSans_500Medium",
+    fontSize: 30,
+    textAlign: "center",
   },
-  formContainer: {
-    flex: 1,
-    justifyContent: "center",
+  headerText: {
+    textAlign: "left",
+    marginLeft: 10,
+    fontSize: 30,
+    fontFamily: "WorkSans_600SemiBold",
+  },
+  submitButton: {
+    backgroundColor: Colours.main,
+    paddingVertical: 10,
+    marginHorizontal: "10%",
+    borderRadius: 30,
+  },
+  submitText: {
+    fontSize: 20,
+    fontFamily: "WorkSans_600SemiBold",
   },
 });
 

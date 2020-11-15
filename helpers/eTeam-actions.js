@@ -1,8 +1,10 @@
+import ENV from '../env'
+
 export const LOGIN = "LOGIN";
 
 export const login = (username, password) => {
   return async (dispatch) => {
-    const response = await fetch("http://192.168.1.2:5000/eteam/signin", {
+    const response = await fetch(`http://${ENV.localhost}:5000/eteam/signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -14,6 +16,7 @@ export const login = (username, password) => {
     });
 
     const resData = await response.json();
+    console.log(resData);
 
     if (resData === 'USER_INVALID') {
         throw new Error('User does not exist!');
