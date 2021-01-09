@@ -19,7 +19,7 @@ const LogIn = (props) => {
     } else {
       setSubmitDisabled(true);
     }
-  }, [username, password])
+  }, [username, password]);
 
   // useEffect(() => {
   //   if (error) {
@@ -32,7 +32,7 @@ const LogIn = (props) => {
       await dispatch(eTeamActions.login(username, password));
       props.navigation.navigate("UserNav");
     } catch (err) {
-      Alert.alert('Sorry', 'Invalid email or password', [{text:'Okay'}])
+      Alert.alert("Sorry", "Invalid email or password", [{ text: "Okay" }]);
     }
   };
 
@@ -57,7 +57,7 @@ const LogIn = (props) => {
           }}
           secureTextEntry
         />
-  
+
         <Button
           title="Log In"
           disabled={submitDisabled}
