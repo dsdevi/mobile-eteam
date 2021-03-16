@@ -4,6 +4,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import Colours from "../constants/colours";
 import Details from "../screens/Details";
 import LogIn from "../screens/LogIn";
+import Report from "../screens/Report";
 
 defaultNavOptions = {
   headerStyle: { backgroundColor: Colours.main },
@@ -21,6 +22,7 @@ const LogInNav = createStackNavigator(
 const UserNav = createStackNavigator(
   {
     Details: Details,
+    Report: Report,
   },
   {
     defaultNavigationOptions: defaultNavOptions,

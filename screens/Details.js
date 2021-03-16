@@ -12,6 +12,7 @@ import * as eTeamActions from "../helpers/eTeam-actions";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import { Card, Button, Icon } from "react-native-elements";
 import { Linking } from "react-native";
+import Colours from "../constants/colours";
 
 const Details = (props) => {
   //const [pushToken, setPushToken] = useState();
@@ -24,6 +25,7 @@ const Details = (props) => {
   const [emergency, setEmergency] = useState(false);
   const [emergencyLat, setEmergencyLat] = useState();
   const [emergencyLng, setEmergencyLng] = useState();
+  const [emergencyType, setEmergencyType] = useState();
 
   useEffect(() => {
     Permissions.getAsync(Permissions.NOTIFICATIONS)
@@ -62,6 +64,7 @@ const Details = (props) => {
           setEmergency(true);
           setEmergencyLat(data.lat);
           setEmergencyLng(data.lng);
+          setEmergencyType(data.type);
         }
       }
     );
@@ -76,6 +79,8 @@ const Details = (props) => {
           setEmergency(true);
           setEmergencyLat(data.lat);
           setEmergencyLng(data.lng);
+          setEmergencyType(data.type);
+          console.log(data.type);
         }
 
         // console.log(notification.request.content.data);
@@ -110,7 +115,7 @@ const Details = (props) => {
     setEmergency(false);
     setEmergencyLat(null);
     setEmergencyLng(null);
-  }
+  };
 
   const getLocation = async () => {
     verifyPermissions();
@@ -153,7 +158,9 @@ const Details = (props) => {
   };
 
   const openInMaps = async () => {
-    await Linking.openURL(`https://www.google.com/maps?q=${emergencyLat},${emergencyLng}`);
+    await Linking.openURL(
+      `https://www.google.com/maps?q=${emergencyLat},${emergencyLng}`
+    );
   };
 
   return (
@@ -196,10 +203,20 @@ const Details = (props) => {
             <Button
               buttonStyle={styles.directionButton}
               titleStyle={styles.directionButtonText}
-              title="LOCATION"
+              title="DIRECTIONS"
               onPress={openInMaps}
             />
           </View>
+          <Button
+            buttonStyle={styles.reportButton}
+            titleStyle={styles.reportStyle}
+            title="Report"
+            onPress={() => {
+              console.log("report");
+              clearEmergency();
+              props.navigation.navigate("Report", { type: emergencyType });
+            }}
+          />
           <Button title="Clear" type="clear" onPress={clearEmergency} />
         </Card>
       )}
@@ -264,6 +281,14 @@ const styles = StyleSheet.create({
   },
   directionButtonContainer: {
     marginVertical: 20,
+  },
+  reportStyle: {
+    fontFamily: "WorkSans_600SemiBold",
+    fontSize: 25,
+  },
+  reportButton: {
+    padding: 20,
+    backgroundColor: Colours.main,
   },
 });
 

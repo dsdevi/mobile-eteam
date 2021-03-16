@@ -41,7 +41,7 @@ export const setLocation = (token, lat, lng) => {
 export const availability = (token, value) => {
   return async (dispatch) => {
     const response = await fetch(
-      `http://${ENV.localhost}:5000/eteam/availablity`,
+      `http://${ENV.localhost}:5000/eteam/availability`,
       {
         method: "POST",
         headers: {
@@ -67,6 +67,60 @@ export const availability = (token, value) => {
     }
 
     dispatch({ type: AVAILABILITY, value: value });
+  };
+};
+
+export const accidentSubmit = (details) => {
+  return async (dispatch) => {
+    const response = await fetch(
+      `http://${ENV.localhost}:5000/eteam/submit/accident`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(details),
+      }
+    );
+
+    if (!response.ok) {
+      console.log("accidentSubmit response error");
+    }
+
+    const resData = await response.json();
+    console.log(resData);
+
+    if (!resData.success) {
+      console.log("accidentSubmit resData error");
+      throw new Error(resData.message);
+    }
+  };
+};
+
+export const eventSubmit = (details) => {
+  return async (dispatch) => {
+    const response = await fetch(
+      `http://${ENV.localhost}:5000/eteam/submit/event`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(details),
+      }
+    );
+
+    if (!response.ok) {
+      console.log("eventSubmit response error");
+    }
+
+    const resData = await response.json();
+    console.log(resData);
+
+    if (!resData.success) {
+      console.log("eventSubmit resData error");
+      throw new Error(resData.message);
+    }
   };
 };
 
